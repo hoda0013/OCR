@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/main"
+            app:startDestination="@id/cameraFragment">
+
+    <fragment android:id="@+id/cameraFragment" android:name="com.example.betterrecognize.camera.CameraFragment"
+              android:label="CameraFragment">
+        <action android:id="@+id/action_cameraFragment_to_reviewFragment" app:destination="@id/reviewFragment"/>
+    </fragment>
+    <fragment android:id="@+id/reviewFragment" android:name="com.example.betterrecognize.review.ReviewFragment"
+              android:label="ReviewFragment"/>
+</navigation>

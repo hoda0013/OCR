@@ -3,7 +3,10 @@ package com.example.betterrecognize.review
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.ImageDecoder
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,9 +26,17 @@ import java.io.InputStream
 
 class ReviewFragment : Fragment() {
 
-    val recognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
+    private val recognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private lateinit var mGraphicOverlay: GraphicOverlay
     private val parser = TextParser()
+    private lateinit var photoUri: Uri
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val uriString = arguments?.getString(KEY_PHOTO_URI) ?: throw RuntimeException("Must pass Uri as argument")
+        photoUri = Uri.parse(uriString)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_review, container, false)
@@ -39,10 +50,11 @@ class ReviewFragment : Fragment() {
         // TODO: Grab image from camera (file, URI, etc...) and show in ImageView
         mGraphicOverlay = view.findViewById(R.id.graphic_overlay)
 
-        val image = getBitmapFromAsset(context!!, "test_receipt_2.jpg")
+//        val image = getBitmapFromAsset(context!!, "test_receipt_2.jpg")
+        val image = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
+        imageview_preview.setImageURI(photoUri)
         image?.let {
             progressbar_review.visibility = View.VISIBLE
-            imageview_preview.setImageBitmap(it)
             runTextRecognition(it)
         }
     }
@@ -95,5 +107,18 @@ class ReviewFragment : Fragment() {
         }
 
         return bitmap
+    }
+
+    companion object {
+//        fun newInstance(photoUri: Uri): ReviewFragment {
+//            val bundle = Bundle()
+//            bundle.putString(KEY_PHOTO_URI, photoUri.toString())
+//            val fragment = ReviewFragment()
+//            fragment.arguments = bundle
+//            return fragment
+//        }
+
+        val TAG: String = ReviewFragment::class.java.simpleName
+        val KEY_PHOTO_URI = "$TAG.KEY_PHOTO_URI"
     }
 }
