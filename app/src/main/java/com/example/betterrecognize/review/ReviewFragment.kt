@@ -7,13 +7,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.betterrecognize.GraphicOverlay
 import com.example.betterrecognize.R
-import com.example.betterrecognize.TextGraphic
 import com.example.betterrecognize.processing.TextParser
 import com.google.android.gms.tasks.OnFailureListener
-import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
@@ -22,16 +21,11 @@ import java.io.IOException
 import java.io.InputStream
 
 
-
 class ReviewFragment : Fragment() {
 
     val recognizer = FirebaseVision.getInstance().onDeviceTextRecognizer
     private lateinit var mGraphicOverlay: GraphicOverlay
     private val parser = TextParser()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_review, container, false)
@@ -64,8 +58,7 @@ class ReviewFragment : Fragment() {
                     override fun onFailure(e: Exception) {
                         progressbar_review.visibility = View.VISIBLE
                         // Task failed with an exception
-//                        mTextButton.setEnabled(true)
-                        // TODO Show error message
+                        makeToast("Text processing failed. Please contact Google customer support.")
                         e.printStackTrace()
                     }
                 })
@@ -73,8 +66,7 @@ class ReviewFragment : Fragment() {
 
     private fun processTextRecognitionResult(texts: FirebaseVisionText) {
         if (texts.textBlocks.isEmpty()) {
-//            showToast("No text found")
-            // TODO: Show error toast
+            makeToast("No text found in image")
             return
         }
 
@@ -84,28 +76,10 @@ class ReviewFragment : Fragment() {
         progressbar_review.visibility = View.INVISIBLE
         button_submit.isEnabled = true
 
-//        mGraphicOverlay.clear()
-//        for (i in blocks.indices) {
-//            val lines = blocks[i].lines
-//            for (j in lines.indices) {
-//                val elements = lines[j].elements
-//                for (k in elements.indices) {
-//                    val textGraphic = TextGraphic(mGraphicOverlay, elements[k])
-//                    //                    String keyword = "Grs Bu.";
-//                    //                    FirebaseVisionText.TextBlock block = blocks.get(i);
-//                    //                    String text = block.getText();
-//                    //                    String lineText = lines.get(j).getText();
-//                    //                    if (lineText.contains(keyword)) {
-//                    //                        Rect boundingBox = block.getBoundingBox();
-//                    //                        Point[] cornerPoints = block.getCornerPoints();
-//
-////                    mGraphicOverlay.add(textGraphic)
-//                    //                        Log.i("TAG", String.format("Keyword: %s exists at \n boundingBox L: %d, R: %d, T: %d, B: %d \n cornerPoints: 1: %d", keyword));
-//                    //                    }
-//
-//                }
-//            }
-//        }
+    }
+
+    private fun makeToast(text: String) {
+        Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 
     fun getBitmapFromAsset(context: Context, filePath: String): Bitmap? {

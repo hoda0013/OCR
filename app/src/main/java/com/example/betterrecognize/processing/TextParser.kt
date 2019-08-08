@@ -6,9 +6,9 @@ class TextParser {
 
     private val GROSS_BUSHEL_ABBREVIATTED = "Grs Bu"
     private val NET_BUSHEL_ABBREVIATED = "Net Bu"
-
+    private val matchEverythingUpToFirstDigitRegex: Regex = "(^\\D*)".toRegex()
     fun parse(input: FirebaseVisionText): ParsedOutput {
-        var output = ParsedOutput(null, null, null, null, null)
+        val output = ParsedOutput(null, null, null, null, null)
         val blocks: MutableList<FirebaseVisionText.TextBlock> = input.textBlocks
 
         val lines: ArrayList<String> = arrayListOf()
@@ -21,36 +21,13 @@ class TextParser {
 
         lines.forEach {
             if (it.contains(GROSS_BUSHEL_ABBREVIATTED)) {
-                output.grossBushel = it
+                output.grossBushel = matchEverythingUpToFirstDigitRegex.replace(it, "")
             }
             if (it.contains(NET_BUSHEL_ABBREVIATED)) {
-                output.netBushel = it
+                output.netBushel = matchEverythingUpToFirstDigitRegex.replace(it, "")
             }
         }
 
-//        for (i in blocks.indices) {
-//            val lines = blocks[i].lines
-//            for (j in lines.indices) {
-//                val elements = lines[j].elements
-//                for (k in elements.indices) {
-//
-//
-////                    val textGraphic = TextGraphic(mGraphicOverlay, elements[k])
-//                    //                    String keyword = "Grs Bu.";
-//                    //                    FirebaseVisionText.TextBlock block = blocks.get(i);
-//                    //                    String text = block.getText();
-//                    //                    String lineText = lines.get(j).getText();
-//                    //                    if (lineText.contains(keyword)) {
-//                    //                        Rect boundingBox = block.getBoundingBox();
-//                    //                        Point[] cornerPoints = block.getCornerPoints();
-//
-////                    mGraphicOverlay.add(textGraphic)
-//                    //                        Log.i("TAG", String.format("Keyword: %s exists at \n boundingBox L: %d, R: %d, T: %d, B: %d \n cornerPoints: 1: %d", keyword));
-//                    //                    }
-//
-//                }
-//            }
-//        }
         return output
     }
 }
