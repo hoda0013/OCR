@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "665186098900",
+    "firebase_url": "https://betterrecognize-14aa1.firebaseio.com",
+    "project_id": "betterrecognize-14aa1",
+    "storage_bucket": "betterrecognize-14aa1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:665186098900:android:f7746b5ae92faac6",
+        "android_client_info": {
+          "package_name": "com.example.betterrecognize"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "665186098900-bae0s35gn7t3blomnh116m0vgu4ec04a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_Yk4O56mQzSbmr7lrWg5kK8IwheX7HOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "665186098900-bae0s35gn7t3blomnh116m0vgu4ec04a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
