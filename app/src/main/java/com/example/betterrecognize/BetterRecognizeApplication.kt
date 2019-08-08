@@ -11,7 +11,7 @@ class BetterRecognizeApplication : Application() {
     val retrofit: Retrofit by lazy {
         Retrofit
             .Builder()
-            .baseUrl("")
+            .baseUrl("https://www.exmaple.com")
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()
