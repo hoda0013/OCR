@@ -9,5 +9,11 @@
         <action android:id="@+id/action_cameraFragment_to_reviewFragment" app:destination="@id/reviewFragment"/>
     </fragment>
     <fragment android:id="@+id/reviewFragment" android:name="com.example.betterrecognize.review.ReviewFragment"
-              android:label="ReviewFragment"/>
+              android:label="ReviewFragment">
+        <action android:id="@+id/action_reviewFragment_to_successFragment" app:destination="@id/successFragment"/>
+    </fragment>
+    <fragment android:id="@+id/successFragment" android:name="com.example.betterrecognize.SuccessFragment"
+              android:label="SuccessFragment">
+        <action android:id="@+id/action_successFragment_to_cameraFragment" app:destination="@id/cameraFragment"/>
+    </fragment>
 </navigation>

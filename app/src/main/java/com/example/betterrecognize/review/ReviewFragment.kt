@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.findNavController
 import com.example.betterrecognize.BetterRecognizeApplication
 import com.example.betterrecognize.R
 import com.example.betterrecognize.network.Network
@@ -54,7 +55,7 @@ class ReviewFragment : Fragment() {
         }
 
         val uploadObserver = Observer<String> {
-            Toast.makeText(context!!, it, Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_reviewFragment_to_successFragment)
         }
 
         viewModel.apply {

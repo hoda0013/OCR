@@ -1,7 +1,6 @@
 package com.example.betterrecognize.review
 
 import android.graphics.Bitmap
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.betterrecognize.network.Network
@@ -11,7 +10,6 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.coroutines.*
-import retrofit2.await
 
 class ReviewViewModel constructor(private val network: Network) : ViewModel() {
 
@@ -42,7 +40,6 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
             val result = withContext(bgDispatcher) {
                 network.uploadData()
             }
-
             uploadResultLiveData.value = result.msg
         }
     }
