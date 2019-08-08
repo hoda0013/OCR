@@ -16,7 +16,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/guideline"/>
 
-    <com.example.betterrecognize.GraphicOverlay
+    <com.example.betterrecognize.processing.GraphicOverlay
             android:id="@+id/graphic_overlay"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"

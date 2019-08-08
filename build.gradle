@@ -31,3 +31,53 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
+
+ext {
+    appCompat = '1.0.2'
+    coreKtx = '1.2.0-alpha01'
+    preference = '1.0.0'
+    databinding = '3.0.1'
+    fragmentktx = '1.2.0-alpha01'
+    constraintLayout = '2.0.0-alpha2'
+    material = '1.1.0-alpha06'
+    materialDialogs = '3.0.0-rc4'
+    cardview = '1.0.0'
+    navigation = '1.0.0'
+    timber = '4.7.1'
+    javaTime = '1.1.1'
+    sqlbrite = '3.2.0'
+    sqliteFramework = '2.0.0'
+    daggerVersion = '2.20'
+    lifecycleVersion = '2.0.0'
+    retrofit = '2.5.0'
+    retrofitRxAdapter = '2.5.0'
+    okHttp = '3.14.1'
+    gson = '2.8.2'
+    gsonConverter = '2.3.0'
+    okhttpLoggingInterceptor = '3.4.1'
+    rxJava2 = '2.2.3'
+    rxAndroid = '2.1.0'
+    rxKotlin = '2.2.0'
+    coroutinesVersion = '1.0.0'
+    coroutinesAdapter = '0.9.2'
+    playServicesAnalytics = '16.0.5'
+    crashlytics = '2.10.1'
+    firebaseCore = '16.0.5'
+    work = '2.0.1'
+
+    androidxArchCoreTesting = '2.0.0'
+    androidxTestCore = '1.1.0-alpha01'
+    junit = '4.12'
+    mockitoCore = '2.23.0'
+    retrofitMock = '2.3.0'
+    mockitoKotlin = '2.0.0'
+    livedatatesting = '1.1.0'
+    androidxJunit = '1.0.0'
+    androidxRunner = '1.1.1'
+    androidxRules = '1.1.1'
+    espresso = '3.1.1'
+    espressoOkHttpIdlingResource = '1.0.0'
+    mockWebServer = okHttp
+    conditionWatcher = '0.2'
+}

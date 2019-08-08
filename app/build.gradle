@@ -36,11 +36,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision-face-model:18.0.0'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:20.0.1'
 
+    implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit"
+    implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp"
+    implementation "com.google.code.gson:gson:$rootProject.ext.gson"
+    implementation "com.squareup.retrofit2:converter-gson:$rootProject.ext.gsonConverter"
+    implementation "com.squareup.okhttp3:logging-interceptor:$rootProject.ext.okhttpLoggingInterceptor"
+
     implementation 'com.google.firebase:firebase-core:17.0.1'
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.2.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    implementation 'androidx.lifecycle:lifecycle-extensions:2.0.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

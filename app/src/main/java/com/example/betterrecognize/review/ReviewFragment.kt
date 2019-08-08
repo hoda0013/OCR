@@ -3,7 +3,6 @@ package com.example.betterrecognize.review
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import android.graphics.ImageDecoder
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -12,8 +11,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.betterrecognize.GraphicOverlay
+import androidx.lifecycle.ViewModelProviders
+import com.example.betterrecognize.BetterRecognizeApplication
+import com.example.betterrecognize.processing.GraphicOverlay
 import com.example.betterrecognize.R
+import com.example.betterrecognize.network.Network
+import com.example.betterrecognize.processing.ParsedOutput
 import com.example.betterrecognize.processing.TextParser
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.firebase.ml.vision.FirebaseVision
@@ -30,9 +33,16 @@ class ReviewFragment : Fragment() {
     private lateinit var mGraphicOverlay: GraphicOverlay
     private val parser = TextParser()
     private lateinit var photoUri: Uri
+    private lateinit var viewModel: ReviewViewModel
+    private lateinit var parsedResult: ParsedOutput
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProviders.of(
+            this,
+            ReviewViewModelFactory(Network((requireActivity().applicationContext as BetterRecognizeApplication).retrofit))
+        ).get(ReviewViewModel::class.java)
 
         val uriString = arguments?.getString(KEY_PHOTO_URI) ?: throw RuntimeException("Must pass Uri as argument")
         photoUri = Uri.parse(uriString)
@@ -45,12 +55,11 @@ class ReviewFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         button_submit.setOnClickListener {
             // TODO: Submit image and data
+            viewModel.submitData(parsedResult)
         }
 
-        // TODO: Grab image from camera (file, URI, etc...) and show in ImageView
         mGraphicOverlay = view.findViewById(R.id.graphic_overlay)
 
-//        val image = getBitmapFromAsset(context!!, "test_receipt_2.jpg")
         val image = MediaStore.Images.Media.getBitmap(requireActivity().contentResolver, photoUri)
         imageview_preview.setImageURI(photoUri)
         image?.let {
@@ -82,42 +91,18 @@ class ReviewFragment : Fragment() {
             return
         }
 
-        val parseResult = parser.parse(texts)
+        parsedResult = parser.parse(texts)
 
-        textview_data.text = parseResult.toString()
+        textview_data.text = parsedResult.toString()
         progressbar_review.visibility = View.INVISIBLE
         button_submit.isEnabled = true
-
     }
 
     private fun makeToast(text: String) {
         Toast.makeText(context!!, text, Toast.LENGTH_SHORT).show()
     }
 
-    fun getBitmapFromAsset(context: Context, filePath: String): Bitmap? {
-        val assetManager = context.assets
-
-        val `is`: InputStream
-        var bitmap: Bitmap? = null
-        try {
-            `is` = assetManager.open(filePath)
-            bitmap = BitmapFactory.decodeStream(`is`)
-        } catch (e: IOException) {
-            e.printStackTrace()
-        }
-
-        return bitmap
-    }
-
     companion object {
-//        fun newInstance(photoUri: Uri): ReviewFragment {
-//            val bundle = Bundle()
-//            bundle.putString(KEY_PHOTO_URI, photoUri.toString())
-//            val fragment = ReviewFragment()
-//            fragment.arguments = bundle
-//            return fragment
-//        }
-
         val TAG: String = ReviewFragment::class.java.simpleName
         val KEY_PHOTO_URI = "$TAG.KEY_PHOTO_URI"
     }

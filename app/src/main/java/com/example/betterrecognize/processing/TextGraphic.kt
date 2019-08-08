@@ -1,4 +1,4 @@
-package com.example.betterrecognize
+package com.example.betterrecognize.processing
 
 import android.graphics.Canvas
 import android.graphics.Color
