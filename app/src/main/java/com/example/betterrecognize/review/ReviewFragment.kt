@@ -42,7 +42,9 @@ class ReviewFragment : Fragment() {
         }
 
         val resultObserver = Observer<ParsedOutput?> {
-            textview_data.text = it.toString()
+            it?.let {
+                textview_data.text = it.toString()
+            }
         }
 
         val toastObserver = Observer<Event<String>> {

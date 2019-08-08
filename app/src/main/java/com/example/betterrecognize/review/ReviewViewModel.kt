@@ -9,6 +9,7 @@ import com.example.betterrecognize.processing.TextParser
 import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
+import kotlinx.coroutines.*
 
 class ReviewViewModel constructor(private val network: Network) : ViewModel() {
 
@@ -19,6 +20,13 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
     val buttonLiveData = MutableLiveData<Boolean>().apply { value = false }
     val resultLiveData = MutableLiveData<ParsedOutput?>().apply { value = ParsedOutput(null, null, null, null, null) }
     val toastEventLiveData = MutableLiveData<Event<String>>().apply { value = Event("") }
+
+    // dispatches execution into Android main thread
+    private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
+    // represent a pool of shared threads as coroutine dispatcher
+    private val bgDispatcher: CoroutineDispatcher = Dispatchers.IO
+
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     fun runRecognition(bitmap: Bitmap) {
         runTextRecognition(bitmap)
@@ -34,7 +42,21 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
         val image = FirebaseVisionImage.fromBitmap(bitmap)
         recognizer.processImage(image)
             .addOnSuccessListener { texts ->
-                processTextRecognitionResult(texts)
+                if (texts.textBlocks.isEmpty()) {
+                    toastEventLiveData.value = Event("No text found in image")
+                    progressLiveData.value = false
+                    resultLiveData.value = ParsedOutput(null, null, null, null, null)
+                } else {
+                    uiScope.launch {
+                          val output: ParsedOutput = async(bgDispatcher) {
+                            parse(texts)
+                        }.await()
+
+                        resultLiveData.value = output
+                        progressLiveData.value = false
+                        buttonLiveData.value = true
+                    }
+                }
             }
             .addOnFailureListener { e ->
                 progressLiveData.value = false
@@ -43,15 +65,7 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
             }
     }
 
-    private fun processTextRecognitionResult(texts: FirebaseVisionText) {
-        if (texts.textBlocks.isEmpty()) {
-            toastEventLiveData.value = Event("No text found in image")
-            progressLiveData.value = false
-            resultLiveData.value = ParsedOutput(null, null, null, null, null)
-            return
-        }
-        resultLiveData.value = parser.parse(texts)
-        progressLiveData.value = false
-        buttonLiveData.value = true
+    private fun parse(texts: FirebaseVisionText): ParsedOutput {
+        return parser.parse(texts)
     }
 }

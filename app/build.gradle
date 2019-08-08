@@ -40,7 +40,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-ml-vision-image-label-model:18.0.0'
     implementation 'com.google.firebase:firebase-ml-vision-face-model:18.0.0'
     implementation 'com.google.firebase:firebase-ml-model-interpreter:20.0.1'
-
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.1.1'
     implementation "com.squareup.retrofit2:retrofit:$rootProject.ext.retrofit"
     implementation "com.squareup.okhttp3:okhttp:$rootProject.ext.okHttp"
     implementation "com.google.code.gson:gson:$rootProject.ext.gson"
