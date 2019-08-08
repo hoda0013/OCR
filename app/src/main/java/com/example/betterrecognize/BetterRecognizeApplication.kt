@@ -1,6 +1,7 @@
 package com.example.betterrecognize
 
 import android.app.Application
+import com.example.betterrecognize.network.NetworkApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -8,13 +9,14 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class BetterRecognizeApplication : Application() {
 
-    val retrofit: Retrofit by lazy {
+    val networkApi: NetworkApi by lazy {
         Retrofit
             .Builder()
-            .baseUrl("https://www.exmaple.com")
+            .baseUrl("http://demo4037212.mockable.io/")
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()
+            .create(NetworkApi::class.java)
     }
 
     private val gsonConverterFactory: GsonConverterFactory by lazy {
@@ -34,9 +36,5 @@ class BetterRecognizeApplication : Application() {
         } else {
             builder.build()
         }
-    }
-
-    override fun onCreate() {
-        super.onCreate()
     }
 }

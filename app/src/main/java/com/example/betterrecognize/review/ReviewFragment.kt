@@ -28,7 +28,7 @@ class ReviewFragment : Fragment() {
 
         viewModel = ViewModelProviders.of(
             this,
-            ReviewViewModelFactory(Network((requireActivity().applicationContext as BetterRecognizeApplication).retrofit))
+            ReviewViewModelFactory(Network((requireActivity().applicationContext as BetterRecognizeApplication).networkApi))
         ).get(ReviewViewModel::class.java)
 
         val uriString = arguments?.getString(KEY_PHOTO_URI) ?: throw RuntimeException("Must pass Uri as argument")
@@ -53,11 +53,16 @@ class ReviewFragment : Fragment() {
             }
         }
 
+        val uploadObserver = Observer<String> {
+            Toast.makeText(context!!, it, Toast.LENGTH_SHORT).show()
+        }
+
         viewModel.apply {
             progressLiveData.observe(this@ReviewFragment, progressObserver)
             buttonLiveData.observe(this@ReviewFragment, buttonEnabledObserver)
             resultLiveData.observe(this@ReviewFragment, resultObserver)
             toastEventLiveData.observe(this@ReviewFragment, toastObserver)
+            uploadResultLiveData.observe(this@ReviewFragment, uploadObserver)
         }
 
         photoUri = Uri.parse(uriString)

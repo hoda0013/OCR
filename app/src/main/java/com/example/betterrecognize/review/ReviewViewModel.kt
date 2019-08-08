@@ -1,6 +1,7 @@
 package com.example.betterrecognize.review
 
 import android.graphics.Bitmap
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.betterrecognize.network.Network
@@ -10,6 +11,7 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.coroutines.*
+import retrofit2.await
 
 class ReviewViewModel constructor(private val network: Network) : ViewModel() {
 
@@ -21,19 +23,28 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
     val resultLiveData = MutableLiveData<ParsedOutput?>().apply { value = ParsedOutput(null, null, null, null, null) }
     val toastEventLiveData = MutableLiveData<Event<String>>().apply { value = Event("") }
 
+
+    val uploadResultLiveData = MutableLiveData<String>()
+
     // dispatches execution into Android main thread
     private val uiDispatcher: CoroutineDispatcher = Dispatchers.Main
     // represent a pool of shared threads as coroutine dispatcher
     private val bgDispatcher: CoroutineDispatcher = Dispatchers.IO
 
-    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val uiScope = CoroutineScope(uiDispatcher)
 
     fun runRecognition(bitmap: Bitmap) {
         runTextRecognition(bitmap)
     }
 
     fun submitData() {
-        network.uploadData()
+        uiScope.launch {
+            val result = withContext(bgDispatcher) {
+                network.uploadData()
+            }
+
+            uploadResultLiveData.value = result.msg
+        }
     }
 
     private fun runTextRecognition(bitmap: Bitmap) {
@@ -48,9 +59,9 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
                     resultLiveData.value = ParsedOutput(null, null, null, null, null)
                 } else {
                     uiScope.launch {
-                          val output: ParsedOutput = async(bgDispatcher) {
+                        val output: ParsedOutput = withContext(bgDispatcher) {
                             parse(texts)
-                        }.await()
+                        }
 
                         resultLiveData.value = output
                         progressLiveData.value = false

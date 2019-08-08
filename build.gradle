@@ -50,7 +50,7 @@ ext {
     sqliteFramework = '2.0.0'
     daggerVersion = '2.20'
     lifecycleVersion = '2.0.0'
-    retrofit = '2.5.0'
+    retrofit = '2.6.0'
     retrofitRxAdapter = '2.5.0'
     okHttp = '3.14.1'
     gson = '2.8.2'
