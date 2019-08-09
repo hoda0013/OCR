@@ -1,13 +1,40 @@
 package com.example.betterrecognize.network
 
+import retrofit2.http.Body
 import retrofit2.http.POST
 
 
 interface NetworkApi {
-    @POST("ticketdata")
-    suspend fun postData(): TicketResponse
+    @POST("api/delivery-receipts")
+    suspend fun postData(@Body body: TicketBody): TicketResponse
+
+    @POST("api/authenticate")
+    suspend fun authenticate(@Body body: AuthBody = AuthBody("admin", "admin", true)): TicketResponse
 }
 
 data class TicketResponse(
-    val msg: String
+    val id_token: String
+)
+
+data class AuthBody(
+    val username: String,
+    val password: String,
+    val rememberMe: Boolean
+)
+
+data class TicketBody(
+    val crop: String,
+    val elevatorLocation: String,
+    val grossBushel: Float,
+    val grossWeight: Float,
+    val grower: String,
+    val id: Long,
+    val moisture: Float,
+    val netBushel: Float,
+    val netWeight: Float,
+    val tareWeight: Float,
+    val ticketNo: Long,
+    val uploadedBy: String,
+    val uploadedDate: String,
+    val vehicleNo: String
 )

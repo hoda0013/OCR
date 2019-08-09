@@ -12,7 +12,7 @@ class BetterRecognizeApplication : Application() {
     val networkApi: NetworkApi by lazy {
         Retrofit
             .Builder()
-            .baseUrl("http://demo4037212.mockable.io/")
+            .baseUrl("https://conservis-hackathon-ocr.herokuapp.com/")
             .addConverterFactory(gsonConverterFactory)
             .client(okHttpClient)
             .build()

@@ -4,6 +4,7 @@ import android.graphics.Bitmap
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.betterrecognize.network.Network
+import com.example.betterrecognize.network.TicketBody
 import com.example.betterrecognize.processing.ParsedOutput
 import com.example.betterrecognize.processing.TextParser
 import com.google.firebase.ml.vision.FirebaseVision
@@ -38,9 +39,28 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
     fun submitData() {
         uiScope.launch {
             val result = withContext(bgDispatcher) {
-                network.uploadData()
+                val auth = network.authenticate().id_token
+                val parsedData = resultLiveData.value!!
+                network.uploadData(
+                    auth, TicketBody(
+                        "Corn",
+                        "Some place",
+                        parsedData.grossBushel?.toFloat()!!,
+                        parsedData.grossWeight?.toFloat()!!,
+                        "some grower",
+                        0,
+                        0.00F,
+                        parsedData.netBushel?.toFloat()!!,
+                        parsedData.netWeight?.toFloat()!!,
+                        parsedData.tareWeight?.toFloat()!!,
+                        0,
+                        "a person",
+                        "a time",
+                        "num ber"
+                    )
+                )
             }
-            uploadResultLiveData.value = result.msg
+            uploadResultLiveData.value = result.id_token
         }
     }
 
