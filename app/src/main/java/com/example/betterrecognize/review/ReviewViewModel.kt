@@ -11,6 +11,8 @@ import com.google.firebase.ml.vision.FirebaseVision
 import com.google.firebase.ml.vision.common.FirebaseVisionImage
 import com.google.firebase.ml.vision.text.FirebaseVisionText
 import kotlinx.coroutines.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReviewViewModel constructor(private val network: Network) : ViewModel() {
 
@@ -38,29 +40,30 @@ class ReviewViewModel constructor(private val network: Network) : ViewModel() {
 
     fun submitData() {
         uiScope.launch {
+            progressLiveData.value = true
             val result = withContext(bgDispatcher) {
                 val auth = network.authenticate().id_token
                 val parsedData = resultLiveData.value!!
                 network.uploadData(
                     auth, TicketBody(
                         "Corn",
-                        "Some place",
-                        parsedData.grossBushel?.toFloat()!!,
-                        parsedData.grossWeight?.toFloat()!!,
-                        "some grower",
-                        0,
+                        "Eden Prairie",
+                        parsedData.grossBushel?.toFloat(),
+                        parsedData.grossWeight?.toFloat(),
+                        "Evgeni",
                         0.00F,
-                        parsedData.netBushel?.toFloat()!!,
-                        parsedData.netWeight?.toFloat()!!,
-                        parsedData.tareWeight?.toFloat()!!,
+                        parsedData.netBushel?.toFloat(),
+                        parsedData.netWeight?.toFloat(),
+                        parsedData.tareWeight?.toFloat(),
                         0,
-                        "a person",
-                        "a time",
-                        "num ber"
+                        "Evgeni",
+                        null,
+                        "102"
                     )
                 )
             }
             uploadResultLiveData.value = result.id_token
+            progressLiveData.value = false
         }
     }
 

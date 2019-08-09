@@ -23,18 +23,14 @@ class BetterRecognizeApplication : Application() {
         GsonConverterFactory.create()
     }
 
-    private val  okHttpClient: OkHttpClient by lazy {
+    private val okHttpClient: OkHttpClient by lazy {
         val builder = OkHttpClient.Builder()
 
 //        builder.authenticator(conservisAuthenticator)
 
-        if (BuildConfig.DEBUG) {
-            val logger = HttpLoggingInterceptor()
-            logger.level = HttpLoggingInterceptor.Level.HEADERS
-            builder.addInterceptor(logger)
-                .build()
-        } else {
-            builder.build()
-        }
+        val logger = HttpLoggingInterceptor()
+        logger.level = HttpLoggingInterceptor.Level.HEADERS
+        builder.addInterceptor(logger)
+            .build()
     }
 }

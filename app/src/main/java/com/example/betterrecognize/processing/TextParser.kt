@@ -7,6 +7,7 @@ class TextParser {
     private val GROSS_BUSHEL_ABBREVIATTED = "Grs Bu"
     private val NET_BUSHEL_ABBREVIATED = "Net Bu"
     private val matchEverythingUpToFirstDigitRegex: Regex = "(^\\D*)".toRegex()
+    private val commaMatcherRegex: Regex = "(\\,)".toRegex()
     fun parse(input: FirebaseVisionText): ParsedOutput {
         val output = ParsedOutput(null, null, null, null, null)
         val blocks: MutableList<FirebaseVisionText.TextBlock> = input.textBlocks
@@ -21,10 +22,13 @@ class TextParser {
 
         lines.forEach {
             if (it.contains(GROSS_BUSHEL_ABBREVIATTED)) {
-                output.grossBushel = matchEverythingUpToFirstDigitRegex.replace(it, "")
+                val temp = matchEverythingUpToFirstDigitRegex.replace(it, "")
+                output.grossBushel = commaMatcherRegex.replace(temp, "")
+
             }
             if (it.contains(NET_BUSHEL_ABBREVIATED)) {
-                output.netBushel = matchEverythingUpToFirstDigitRegex.replace(it, "")
+                val temp = matchEverythingUpToFirstDigitRegex.replace(it, "")
+                output.netBushel = commaMatcherRegex.replace(temp, "")
             }
         }
 
